@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+  <div class="page-header">
+    <h1>Welcome to Twitter.js!</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <img src="https://pbs.twimg.com/profile_images/2450268678/olxp11gnt09no2y2wpsh_normal.jpeg"><br>
+      <b>Your Name</b><br>
+      100 followers
+    </div>
+    <div class="col-md-9">
+
+    <!-- show form for new tweet here-->
+      {% if showForm %}
+      <div class='tweet-form'>
+        <form action="/tweets" method="POST">
+          <label for="name_field">Name:</label>
+          <input name="name" type="text" {% if name %} value = '{{name}}' {% endif %} id="name_field" />
+          <label for="text_field">Text:</label>
+          <input name="text" type="text" id="text_field" style="width: 350px;" />
+
+          <input type="submit" value="Submit" />
+        </form>
+      </div>
+      {% endif %}
+
+      <!-- display tweets here -->
+      <div id = 'tweetList'>
+        {% for tweet in tweets | reverse %}
+          <li class = 'tweet'>
+          <span class="username"><a href='/users/{{tweet.name}}'>{{tweet.name}}</a></span><span data-time = {{tweet.timeSince}} class = 'tweetAgo'> {{tweet.timeSinceString}}</span><br>
+          <a href='/tweet/{{tweet.id}}'>{{tweet.content}}</a>
+
+          </li>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
