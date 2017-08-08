@@ -11,6 +11,11 @@ li {
   color: darkgrey;
 }
 
+form > .row {
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
 /* Wrapper for page content to push down footer */
 #wrap {
   min-height: 100%;
@@ -27,6 +32,18 @@ li {
   background-color: #f5f5f5;
 }
 
+.in-progress {
+  color: darkcyan;
+}
+.finished {
+  color: darkgreen;
+}
+.abandoned {
+  color: darkred;
+}
+.needs-edits {
+  color: darkgoldenrod;
+}
 
 /* Custom page CSS
 -------------------------------------------------- */

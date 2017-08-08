@@ -1,8 +1,5 @@
-const pg = require('pg');
+// let URL = 'postgres://localhost/writingThing';
+// var Sequelize = require('sequelize');
+// var db = new Sequelize(URL);
 
-let URL = 'postgres://localhost/twitter';
-let client = new pg.Client(URL);
-
-client.connect();
-
-module.exports = client;
+// module.exports = db;

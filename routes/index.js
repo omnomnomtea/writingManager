@@ -1,17 +1,31 @@
 const express = require('express');
-// const Sequelize = require('sequelize');
-// var db = new Sequelize('postgres://localhost:5432/writingProject', {
-//     logging: true
-// });
+const functionBank = require('../functionBank');
+
 
 
 module.exports = function (io) {
-
   const router = express.Router();
 
   router.get('/', function (request, response, next) {
-    response.render('index');
+    functionBank.getProjects()
+      .then((projectList) => {
+        response.render('index', { fics: projectList });
+      });
   });
+
+  router.get('/fics/add', (request, response, next) => {
+    response.render('addFicPage.html');
+  });
+
+  router.post('/fics/add', (request, response, next) => {
+
+    functionBank.addNewProject(request.body.title, request.body.status, request.body.posted)
+      .then((project) => {
+        response.render('index', { fics: [project] });
+      })
+        .catch(next)
+  })
+
 
   return router;
 }

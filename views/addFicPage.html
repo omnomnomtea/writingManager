@@ -1,0 +1,62 @@
+{% extends "layout.html" %} {% block content %}
+
+<div class='newficform container'>
+
+  <h3>Add New Fic</h3>
+
+
+  <form action="/fics/add" method="POST">
+    <div class="row">
+      <!-- Title -->
+      <label class="col-sm-2" for="title_field">Title:</label>
+      <input class="col-sm-10" name="title" type="text" id="title_field" />
+    </div>
+
+    <div class="row">
+      <!-- Fandom -->
+      <label class="col-sm-2" for="fandom_field">Fandom:</label>
+      <input class="col-sm-10" name="fandom" type="text" id="fandom_field" />
+    </div>
+
+    <div class="row">
+      <!-- Initial wordcount -->
+      <label class="col-sm-2" for="wordcount_field">Starting Wordcount:</label>
+      <input class="col-sm-2" name="wordcount" type="number" id="wordcount_field" />
+
+      <!-- Already posted? -->
+      <label class="col-sm-1" for="posted">Posted:</label>
+      <select class="col-sm-3" name="posted">
+        <option value="no">No</option>
+        <option value="yes">Yes</option>
+      </select>
+
+      <!-- Status? -->
+      <label class="col-sm-1" for="status">Posted:</label>
+      <select class="col-sm-3" name="status">
+        <option value="in-progress">In-progress</option>
+        <option value="complete">Complete</option>
+        <option value="abandoned">Abandoned</option>
+        <option value="needs-edits">Needs edits</option>
+      </select>
+
+    </div>
+
+
+    <div class="row">
+      <!-- Summary -->
+      <label class="col-sm-2" for="summary_field">Summary:</label>
+      <textarea class="col-sm-10" name="summary" type="text" id="summary_field" />
+      </textarea>
+    </div>
+
+    <br />
+
+
+    <input type="submit" value="Submit" />
+  </form>
+</div>
+
+
+
+
+{% endblock %}

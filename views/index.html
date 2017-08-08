@@ -1,27 +1,28 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block content %}
 
-{% block content %}
+<div class="page-header">
+  <h1>Welcome to Tess's writing database</h1>
+</div>
+<div id="project-list">
+  <div class="col-md-3">
 
-  <div class="page-header">
-    <h1>Welcome to Tess's writing database</h1>
+    <h3>Projects:</h3>
+    <ul>
+      {% for project in fics %}
+      <li id={{project.id}}>
+
+        <h4 class = {{project.writingStatus}}>{{project.title}}</h4>
+        Words: {{project.wordcount}}
+
+      </li>
+      {% endfor %}
+    </ul>
   </div>
-  <div id="project-list">
-    <div class="col-md-3">
-
-      <h4>Projects:</h4>
-      <ul>
-
-        {% for project in projects %}
-
-        {% endfor %}
-
-      </ul>
-    </div>
-    <div class="col-md-9">
+  <div class="col-md-9">
 
 
-      </div>
-    </div>
   </div>
+</div>
+</div>
 
 {% endblock %}
