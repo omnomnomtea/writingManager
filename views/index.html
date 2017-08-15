@@ -11,8 +11,9 @@
       {% for project in fics %}
       <li id={{project.id}}>
 
-        <h4 class = {{project.writingStatus}}>{{project.title}}</h4>
-        Words: {{project.wordcount}}
+        <h4 class ='{{project.status}}'>{{project.title}}</h4>
+        <p>Words: {{project.wordcount}}</p>
+        <p><a href="/entries/{{project.urlTitle}}/add">Add Entry</a> <a href="/entries/{{project.urlTitle}}/">See All Entries</a></p>
 
       </li>
       {% endfor %}

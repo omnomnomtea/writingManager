@@ -1,10 +1,11 @@
 var Sequelize = require('sequelize');
-var db = new Sequelize('postgres://localhost:5432/writingThing');
+var db = new Sequelize('postgres://localhost:5432/writingThing', { logging: true });
 
 const Fic = db.define('fic', {
   title: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   wordcount: {
     type: Sequelize.INTEGER,
@@ -42,18 +43,20 @@ const Fic = db.define('fic', {
 
 const Entry = db.define('entry', {
   date: {
-    type: Sequelize.DATEONLY,
-    allowNull: false
+    type: Sequelize.DATEONLY
+    //    allowNull: false
 
   },
-  wordCountDaily: {
+  wordcountDaily: {
     type: Sequelize.INTEGER,
-    allowNull: false
 
   },
-  wordCountTotal: {
+  wordcountTotal: {
     type: Sequelize.INTEGER,
-    allowNull: false
+  },
+  notes: {
+    type: Sequelize.TEXT,
+    allowNull: true
   }
 });
 
@@ -68,21 +71,23 @@ Fic.belongsTo(Fandom);
 Entry.belongsTo(Fic);
 
 
-Entry.hook('afterCreate', function (entry, options) {
-  const entryPromise = entry.getProject();
+Entry.hook('afterCreate', function (entry) {
+  const ficPromise = Fic.findById(entry.ficId);
   if (entry.wordcountTotal) { //if we have only total wordcount...
-    entryPromise
-      .then((project) => {
-        entry.wordCountDaily = entry.wordCountTotal - project.wordCountTotal
+    return ficPromise
+      .then((fic) => {
+        return entry.update({wordcountDaily: entry.wordcountTotal - fic.wordcount});
       })
-      .catch(console.error.bind(console));
   }
-  else if (entry.wordCountDaily) { //if we have today's count but not the total...
-    entryPromise
-      .then((project) => {
-        entry.wordCountTotal = project.wordCountTotal + entry.wordCountDaily;
+  else if (entry.wordcountDaily) { //if we have today's count but not the total...
+    return ficPromise
+      .then((fic) => {
+        return entry.update({wordcountTotal: fic.wordcount + entry.wordcountDaily});
       })
-      .catch(console.error.bind(console));
+  }
+  else {
+    console.error(new Error('need one type of wordcount or the other'))
+    return null;
   }
 });
 
