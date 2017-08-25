@@ -1,26 +1,22 @@
 //Require Modules
 const express = require('express');
 const volleyball = require('volleyball');
-const nunjucks = require('nunjucks');
 const routes = require('./routes');
 const bodyParser = require('body-parser');
 const socketio = require('socket.io');
-var models = require('./models');
+var models = require('./db/models');
 
 
-//Configs and Template
+//Configs
 const app = express();
 app.use(volleyball);
 app.set('view engine', 'html');
-app.engine('html', nunjucks.render);
-nunjucks.configure('views', { noCache: true });
 
-
-//body parser setup MUST GO BEFORE ROUTE SETUP
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-models.db.sync({ force: false })
+//start the server
+models.db.sync({ force: true })
   .then(function () {
     //Server Listening
     const server = app.listen(3000);
@@ -28,10 +24,14 @@ models.db.sync({ force: false })
     console.log('Server is listening on port 3000!');
 
     //route setup
-    app.use('/', routes(io));
+    //io not nessesary- refactor to remove
+    app.use('/api', routes(io));
 
     //HTML & CSS Files
-    app.use(express.static('public'));
+    app.use('/', express.static('public'));
+    app.use('/', express.static('node_modules/bootstrap/dist'));
+
+
   })
   .catch(function (err) {
     console.log('trouble connecting to server!');

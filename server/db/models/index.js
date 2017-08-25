@@ -7,7 +7,13 @@ const Fic = db.define('fic', {
     allowNull: false,
     unique: true
   },
-  wordcount: {
+  startingWordcount: {
+    type: Sequelize.INTEGER,
+    validate: {
+      min: 0
+    }
+  },
+  currentWordcount: {
     type: Sequelize.INTEGER,
     validate: {
       min: 0
@@ -26,7 +32,7 @@ const Fic = db.define('fic', {
   },
   posted: {
     type: Sequelize.BOOLEAN,
-    allowNull: false
+    allowNull: true
   },
   url: {
     type: Sequelize.STRING,
@@ -70,20 +76,26 @@ const Fandom = db.define('fandom', {
 Fic.belongsTo(Fandom);
 Entry.belongsTo(Fic);
 
+Fic.hook('afterCreate', function(fic) {
+  if (!fic.currentWordcount){
+    return fic.update({currentWordcount: fic.startingWordcount});
+  }
+})
+
 
 Entry.hook('afterCreate', function (entry) {
   const ficPromise = Fic.findById(entry.ficId);
   if (entry.wordcountTotal) { //if we have only total wordcount...
     return ficPromise
       .then((fic) => {
-        return entry.update({wordcountDaily: entry.wordcountTotal - fic.wordcount});
-      })
+        return entry.update({ wordcountDaily: (entry.wordcountTotal - fic.currentWordcount) });
+      });
   }
   else if (entry.wordcountDaily) { //if we have today's count but not the total...
     return ficPromise
       .then((fic) => {
-        return entry.update({wordcountTotal: fic.wordcount + entry.wordcountDaily});
-      })
+        return entry.update({ wordcountTotal: fic.currentWordcount + entry.wordcountDaily });
+      });
   }
   else {
     console.error(new Error('need one type of wordcount or the other'))

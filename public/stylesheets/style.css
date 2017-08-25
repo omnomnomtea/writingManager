@@ -76,3 +76,20 @@ code {
   font-weight: bold;
   font-size: 18px;
 }
+
+.table-date, .table-wordcount {
+  padding: 10px;
+}
+
+.complete {
+  color: green;
+}
+.abandoned {
+  color: red;
+}
+.in-progress {
+  color: darkcyan;
+}
+.needs-edits {
+  color: darkgoldenrod;
+}
